@@ -12,6 +12,7 @@ namespace EmployeePayrollMultithreading
     using System.Data.SqlClient;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
 
     public class EmployeePayrollRepository
     {
@@ -92,6 +93,33 @@ namespace EmployeePayrollMultithreading
             }
             /// In case the flag status is default
             return true;
+        }
+        /// <summary>
+        /// UC2 -- Adding the multiple employees record to data base with random threads allocation from task thread pool
+        /// Expected to have high performance than without multithreads
+        /// </summary>
+        /// <param name="employeeModelList">The employee list.</param>
+        public void AddEmployeeListToEmployeePayrollDataBaseWithThread(List<EmployeePayrollModel> employeeModelList)
+        {
+            /// Iterating over all the employee model list and point individual employee detail of the list
+            employeeModelList.ForEach(employeeDetails =>
+            {
+                /// Task is a fine way of implementing multithreading using asynchronous operation
+                /// Task utilises a thread pool and breaks down the program into smaller chunks and allocates a thread to it
+                /// Here chunks of code can be each iteration of loop
+                Task thread = new Task(() =>
+                {
+                    /// Indicating Message For the employee detail addition
+                    Console.WriteLine("Employee Being added" + employeeDetails.EmployeeName);
+                    /// Printing the current thread id being utilised
+                    Console.WriteLine("Current thread id: " + Thread.CurrentThread.ManagedThreadId);
+                    /// Calling the method to add the data to the address book database
+                    this.AddDataToEmployeePayrollDB(employeeDetails);
+                    /// Indicating mesasage to end of data addition
+                    Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                });
+                thread.Start();
+            });
         }
     }
 }
