@@ -28,3 +28,23 @@
 2020-11-12 05:36:12.6489 INFO Employee Successfully added in Database via ThreadId: 4
 2020-11-12 05:36:12.6685 DEBUG Adding the Employee: Tarunvia ThreadID: 4
 2020-11-12 05:36:12.6778 INFO Employee Successfully added in Database via ThreadId: 4
+2020-11-12 06:07:39.4358 DEBUG Adding the Employee: Bangarvia ThreadID: 4
+2020-11-12 06:07:39.6543 INFO Employee Successfully added in Database via ThreadId: 11
+2020-11-12 06:07:39.6543 DEBUG Adding the Employee: Goluvia ThreadID: 4
+2020-11-12 06:07:39.6677 INFO Employee Successfully added in Database via ThreadId: 11
+2020-11-12 06:07:39.6677 DEBUG Adding the Employee: Alokvia ThreadID: 4
+2020-11-12 06:07:39.6783 INFO Employee Successfully added in Database via ThreadId: 11
+2020-11-12 06:07:39.6783 DEBUG Adding the Employee: Prabhasvia ThreadID: 4
+2020-11-12 06:07:39.6783 INFO Employee Successfully added in Database via ThreadId: 11
+2020-11-12 06:07:39.6945 DEBUG Adding the Employee: Amanvia ThreadID: 4
+2020-11-12 06:07:39.6945 INFO Employee Successfully added in Database via ThreadId: 11
+2020-11-12 06:08:31.3868 DEBUG Adding the Employee: Bangarvia ThreadID: 4
+2020-11-12 06:08:31.5974 INFO Employee Successfully added in Database via ThreadId: 10
+2020-11-12 06:08:31.5974 DEBUG Adding the Employee: Goluvia ThreadID: 4
+2020-11-12 06:08:31.6133 INFO Employee Successfully added in Database via ThreadId: 10
+2020-11-12 06:08:31.6133 DEBUG Adding the Employee: Alokvia ThreadID: 4
+2020-11-12 06:08:31.6133 INFO Employee Successfully added in Database via ThreadId: 10
+2020-11-12 06:08:31.6361 DEBUG Adding the Employee: Prabhasvia ThreadID: 4
+2020-11-12 06:08:31.6361 INFO Employee Successfully added in Database via ThreadId: 10
+2020-11-12 06:08:31.6489 DEBUG Adding the Employee: Amanvia ThreadID: 4
+2020-11-12 06:08:31.6489 INFO Employee Successfully added in Database via ThreadId: 10
