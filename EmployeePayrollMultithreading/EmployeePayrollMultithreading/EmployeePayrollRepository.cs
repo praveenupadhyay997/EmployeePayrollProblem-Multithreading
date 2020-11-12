@@ -16,6 +16,8 @@ namespace EmployeePayrollMultithreading
 
     public class EmployeePayrollRepository
     {
+        /// Adding NLog Class to feed the log details for proper monitoring
+        NLog nLog = new NLog();
         /// <summary>
         /// Mutex is a synchronization primitive to implement interthread execution synchronization
         /// Which means a thread can be locked i.e. Untill the thread completes it's execution new thread will not be permitted the entry
@@ -83,6 +85,7 @@ namespace EmployeePayrollMultithreading
             /// Iterating over all the employee model list and point individual employee detail of the list
             foreach (var employeeDetails in employeeModelList)
             {
+                nLog.LogDebug("Adding the Employee: " + employeeDetails.EmployeeName + "via ThreadID: " + Thread.CurrentThread.ManagedThreadId);
                 /// Indicating Message For the employee detail addition
                 Console.WriteLine("Employee being added:" + employeeDetails.EmployeeName);
                 /// Calling the method to add the data to the address book database
@@ -92,6 +95,7 @@ namespace EmployeePayrollMultithreading
                 Console.WriteLine("Thread Execution: " + Thread.CurrentThread.ManagedThreadId);
                 /// Indicating mesasage to end of data addition
                 Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                nLog.LogInfo("Employee Successfully added in Database via ThreadId: " + Thread.CurrentThread.ManagedThreadId);
                 /// Check for flag status
                 if (flag == false)
                     return false;
@@ -109,6 +113,7 @@ namespace EmployeePayrollMultithreading
             /// Iterating over all the employee model list and point individual employee detail of the list
             employeeModelList.ForEach(employeeDetails =>
             {
+                nLog.LogDebug("Adding the Employee: " + employeeDetails.EmployeeName + "via ThreadID: " + Thread.CurrentThread.ManagedThreadId);
                 /// Task is a fine way of implementing multithreading using asynchronous operation
                 /// Task utilises a thread pool and breaks down the program into smaller chunks and allocates a thread to it
                 /// Here chunks of code can be each iteration of loop
@@ -122,6 +127,7 @@ namespace EmployeePayrollMultithreading
                     this.AddDataToEmployeePayrollDB(employeeDetails);
                     /// Indicating mesasage to end of data addition
                     Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                    nLog.LogInfo("Employee Successfully added in Database via ThreadId: " + Thread.CurrentThread.ManagedThreadId);
                 });
                 thread.Start();
             });
@@ -137,6 +143,7 @@ namespace EmployeePayrollMultithreading
             /// Iterating over all the employee model list and point individual employee detail of the list
             employeeModelList.ForEach(employeeDetails =>
             {
+                nLog.LogDebug("Adding the Employee: " + employeeDetails.EmployeeName + "via ThreadID: " + Thread.CurrentThread.ManagedThreadId);
                 /// Task is a fine way of implementing multithreading using asynchronous operation
                 /// Task utilises a thread pool and breaks down the program into smaller chunks and allocates a thread to it
                 /// Here chunks of code can be each iteration of loop
@@ -152,6 +159,7 @@ namespace EmployeePayrollMultithreading
                     this.AddDataToEmployeePayrollDB(employeeDetails);
                     /// Indicating mesasage to end of data addition
                     Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                    nLog.LogInfo("Employee Successfully added in Database via ThreadId: " + Thread.CurrentThread.ManagedThreadId);
                     /// It marks the end of execution of thread and passes a signal to WaitHandle to allow execution of other thread
                     threadMute.ReleaseMutex();
                 });
