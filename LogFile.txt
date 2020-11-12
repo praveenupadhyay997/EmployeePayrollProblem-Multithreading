@@ -48,3 +48,5 @@
 2020-11-12 06:08:31.6361 INFO Employee Successfully added in Database via ThreadId: 10
 2020-11-12 06:08:31.6489 DEBUG Adding the Employee: Amanvia ThreadID: 4
 2020-11-12 06:08:31.6489 INFO Employee Successfully added in Database via ThreadId: 10
+2020-11-12 06:35:42.1332 DEBUG Updating the Employee : Golu Basic Pay to : 40000 
+2020-11-12 06:35:42.2194 INFO Employee detail Successfully updated in Database via ThreadId: 4

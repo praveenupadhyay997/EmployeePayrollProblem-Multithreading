@@ -11,6 +11,7 @@ namespace EmployeePayrollUnitTestProject
     using System.Diagnostics;
     using System.Collections.Generic;
     using System;
+    using System.Runtime.CompilerServices;
 
     [TestClass]
     public class UnitTestClass
@@ -121,6 +122,31 @@ namespace EmployeePayrollUnitTestProject
             /// Stopping the time counter
             timeCounter.Stop();
             Console.WriteLine("Elapsed time using the threads in millisecond: " + (timeCounter.ElapsedMilliseconds));
+        }
+
+        /// <summary>
+        /// TC6 -- To test for addition of multiple data to the list without using the multi-thread
+        /// Calculating the elapsed time too
+        /// </summary>
+        [TestMethod]
+        public void UpdatingMultipleData_GettingTimeOfExecution()
+        {
+            /// Arrange
+            string employeeName = "Golu";
+            int newBasicPay = 40000;
+            bool expected = true;
+            /// To measure the time of execution from System.Diagonostic namespace
+            Stopwatch timeCounter = new Stopwatch();
+            /// Act - invoke the method to get the actual value
+            timeCounter.Start();
+            /// Getting the boolean comparison of the number of rows affected froom the ExecuteNonQuery
+            /// if rowsaffected > 0 then true (symbolising the insertion of data)
+            /// Calling the update data function passing the employee name and basic pay as scalar
+            bool actual = employeePayroll.UpdateDataForEmployee(employeeName, newBasicPay);
+            timeCounter.Stop();
+            Console.WriteLine("Elapsed time without using the threads: " + timeCounter.ElapsedMilliseconds);
+            /// Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }
