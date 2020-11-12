@@ -250,5 +250,55 @@ namespace EmployeePayrollMultithreading
                 connectionToServer.Close();
             }
         }
+        /// <summary>
+        /// UC6 -- Function to update the basic pay of the employee and all the other properties related to it
+        /// deduction = 0.2* basic_pay, taxable pay = 0.8*basic_pay, tax = 0.08*basic-pay, net pay = 0.98*basic_pay
+        /// </summary>
+        /// <param name="empName"></param>
+        /// <returns></returns>
+        public bool UpdateDataForEmployee(string empName, double newBasicPay)
+        {
+            /// Creates a new connection for every method to avoid "ConnectionString property not initialized" exception
+            DBConnection dbc = new DBConnection();
+            /// Calling the Get connection method to establish the connection to the Sql Server
+            connectionToServer = dbc.GetConnection();
+            try
+            {
+                /// Using the connection established
+                using (connectionToServer)
+                {
+                    /// Opening the connection
+                    connectionToServer.Open();
+                    /// Update query  for the table and binding with the parameter passed
+                    string query = @"update dbo.employee_payroll_services set BasicPay= @parameter1, Deductions=0.2*@parameter1,
+                                     TaxablePay = 0.8*@parameter1, Tax = 0.08*@parameter1, NetPay = 0.92*@parameter1 where EmployeeName = @parameter2";
+                    /// Impementing the command on the connection fetched database table
+                    SqlCommand command = new SqlCommand(query, connectionToServer);
+                    /// Adding the log message to the log file
+                    nLog.LogDebug($"Updating the Employee : {empName} Basic Pay to : {newBasicPay} ");
+                    /// Binding the parameter to the formal parameters
+                    command.Parameters.AddWithValue("@parameter1", newBasicPay);
+                    command.Parameters.AddWithValue("@parameter2", empName);
+                    /// Storing the result of the executed query
+                    var result = command.ExecuteNonQuery();
+                    connectionToServer.Close();
+                    if (result != 0)
+                    {
+                        nLog.LogInfo("Employee detail Successfully updated in Database via ThreadId: " + Thread.CurrentThread.ManagedThreadId);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            /// Catching any type of exception generated during the run time
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connectionToServer.Close();
+            }
+        }
     }
 }
