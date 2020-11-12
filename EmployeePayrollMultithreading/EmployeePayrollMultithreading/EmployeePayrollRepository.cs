@@ -12,9 +12,15 @@ namespace EmployeePayrollMultithreading
     using System.Data.SqlClient;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
 
     public class EmployeePayrollRepository
     {
+        /// <summary>
+        /// Mutex is a synchronization primitive to implement interthread execution synchronization
+        /// Which means a thread can be locked i.e. Untill the thread completes it's execution new thread will not be permitted the entry
+        /// </summary>       
+        private static Mutex threadMute = new Mutex();
         /// <summary>
         /// For ensuring the established connection using the Sql Connection specifying the property
         /// </summary>
@@ -92,6 +98,66 @@ namespace EmployeePayrollMultithreading
             }
             /// In case the flag status is default
             return true;
+        }
+        /// <summary>
+        /// UC2 -- Adding the multiple employees record to data base with random threads allocation from task thread pool
+        /// Expected to have high performance than without multithreads
+        /// </summary>
+        /// <param name="employeeModelList">The employee list.</param>
+        public void AddEmployeeListToEmployeePayrollDataBaseWithThread(List<EmployeePayrollModel> employeeModelList)
+        {
+            /// Iterating over all the employee model list and point individual employee detail of the list
+            employeeModelList.ForEach(employeeDetails =>
+            {
+                /// Task is a fine way of implementing multithreading using asynchronous operation
+                /// Task utilises a thread pool and breaks down the program into smaller chunks and allocates a thread to it
+                /// Here chunks of code can be each iteration of loop
+                Task thread = new Task(() =>
+                {
+                    /// Indicating Message For the employee detail addition
+                    Console.WriteLine("Employee Being added" + employeeDetails.EmployeeName);
+                    /// Printing the current thread id being utilised
+                    Console.WriteLine("Current thread id: " + Thread.CurrentThread.ManagedThreadId);
+                    /// Calling the method to add the data to the address book database
+                    this.AddDataToEmployeePayrollDB(employeeDetails);
+                    /// Indicating mesasage to end of data addition
+                    Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                });
+                thread.Start();
+            });
+        }
+        /// <summary>
+        /// UC3 -- Adding the multiple employees record to data base with synchronised threads allocation from task thread pool
+        /// Expected to have slightly lower performance than with asynchronised thread operation
+        /// But the synchronized thread execution is much safe to execute and does not pose a real-time conflict threat for CRUD operation on Database
+        /// </summary>
+        /// <param name="employeeModelList">The employee list.</param>
+        public void AddEmployeeListToEmployeePayrollDataBaseWithThreadSynchronization(List<EmployeePayrollModel> employeeModelList)
+        {
+            /// Iterating over all the employee model list and point individual employee detail of the list
+            employeeModelList.ForEach(employeeDetails =>
+            {
+                /// Task is a fine way of implementing multithreading using asynchronous operation
+                /// Task utilises a thread pool and breaks down the program into smaller chunks and allocates a thread to it
+                /// Here chunks of code can be each iteration of loop
+                Task thread = new Task(() =>
+                {
+                    /// This will block any incoming thread unless the thread execution completes
+                    threadMute.WaitOne();
+                    /// Indicating Message For the employee detail addition
+                    Console.WriteLine("Employee Being added:" + employeeDetails.EmployeeName);
+                    /// Printing the current thread id being utilised
+                    Console.WriteLine("Current thread id: " + Thread.CurrentThread.ManagedThreadId);
+                    /// Calling the method to add the data to the address book database
+                    this.AddDataToEmployeePayrollDB(employeeDetails);
+                    /// Indicating mesasage to end of data addition
+                    Console.WriteLine("Employee added:" + employeeDetails.EmployeeName);
+                    /// It marks the end of execution of thread and passes a signal to WaitHandle to allow execution of other thread
+                    threadMute.ReleaseMutex();
+                });
+                thread.Start();
+                thread.Wait();
+            });
         }
     }
 }
